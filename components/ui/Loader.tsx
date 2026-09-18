@@ -135,7 +135,7 @@ export function Loader() {
       role="status"
       aria-live="polite"
       aria-label="Loading"
-      className="pointer-events-none fixed inset-0 z-[999] flex flex-col items-center justify-center gap-6 bg-brand-dark"
+      className="pointer-events-none fixed inset-0 z-[999] flex flex-col items-center justify-center gap-6 bg-white"
       style={{ visibility: "hidden", opacity: 0 }}
     >
       <div className="relative flex h-24 w-24 items-center justify-center md:h-28 md:w-28">
@@ -146,21 +146,14 @@ export function Loader() {
             cy="100"
             r="92"
             fill="none"
-            stroke="#b9d6f2"
+            stroke="#0353a4"
             strokeWidth="2"
             strokeDasharray="8 14"
           />
         </svg>
 
         <svg viewBox="0 0 200 200" className="relative h-full w-full">
-          <defs>
-            <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#b9d6f2" />
-              <stop offset="55%" stopColor="#0353a4" />
-              <stop offset="100%" stopColor="#f05a3c" />
-            </linearGradient>
-          </defs>
-          <path ref={shapeRef} d={SHAPES[0]} fill="url(#loader-gradient)" />
+          <path ref={shapeRef} d={SHAPES[0]} fill="#0353a4" />
         </svg>
       </div>
 
@@ -168,7 +161,7 @@ export function Loader() {
         {"DILIGENT".split("").map((letter, index) => (
           <span
             key={index}
-            className="font-display text-sm font-semibold tracking-[0.2em] text-white/80"
+            className="font-display text-sm font-semibold tracking-[0.2em] text-brand-dark/80"
           >
             {letter}
           </span>
