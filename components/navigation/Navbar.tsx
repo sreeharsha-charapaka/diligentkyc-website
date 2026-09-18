@@ -135,7 +135,7 @@ export function Navbar() {
           <Link
             href="/"
             aria-label="Diligent home"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 opacity-0 [animation:fade-up_0.7s_ease_both]"
           >
             <Image
               src="/assets/company-logo.png"
@@ -159,7 +159,10 @@ export function Navbar() {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-6 lg:flex">
+          <div
+            className="hidden items-center gap-6 opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:80ms] lg:flex"
+          >
+
             {navigation.map((item) => {
               const isActive =
                 item.href === "/"
@@ -243,7 +246,7 @@ export function Navbar() {
             })}
           </div>
 
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden items-center gap-2 opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:140ms] lg:flex">
             <Button href="/try-free" variant="secondary" size="sm">
               Try Free
             </Button>
@@ -257,7 +260,7 @@ export function Navbar() {
             type="button"
             aria-label="Open navigation menu"
             aria-expanded="false"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-border lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:140ms] lg:hidden"
           >
             <span className="sr-only">Open menu</span>
 

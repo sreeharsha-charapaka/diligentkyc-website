@@ -194,6 +194,7 @@ interface GlobeProps {
     dragSpeed?: number;
     detail?: number;
     style?: CSSProperties;
+    onLoadingChange?: (loading: boolean) => void;
 }
 
 const DEFAULT_DOTS: DotsConfig = {
@@ -229,9 +230,16 @@ export default function Globe({
     dragSpeed = 5,
     detail = 5,
     style,
+    onLoadingChange,
 }: GlobeProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [, setIsLoading] = useState(true);
+    // Kept in a ref (not the effect's dep array) so passing a new inline
+    // callback each render doesn't tear down and rebuild the whole scene.
+    const onLoadingChangeRef = useRef(onLoadingChange);
+    useEffect(() => {
+        onLoadingChangeRef.current = onLoadingChange;
+    }, [onLoadingChange]);
     const [error, setError] = useState<string | null>(null);
     const [hoveredMarker, setHoveredMarker] = useState<{
         name: string;
@@ -469,6 +477,7 @@ export default function Globe({
         const loadWorldData = async () => {
             try {
                 setIsLoading(true);
+                onLoadingChangeRef.current?.(true);
                 const response = await fetch(
                     "https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/50m/physical/ne_50m_land.json"
                 );
@@ -736,9 +745,11 @@ export default function Globe({
                 canvas.style.opacity = "1";
                 canvas.style.visibility = "visible";
                 setIsLoading(false);
+                onLoadingChangeRef.current?.(false);
             } catch (err) {
                 setError("Failed to load land map data");
                 setIsLoading(false);
+                onLoadingChangeRef.current?.(false);
             }
         };
 
@@ -1044,6 +1055,7 @@ export default function Globe({
             resizeObserver.disconnect();
             renderer.dispose();
             container.removeChild(canvas);
+            onLoadingChangeRef.current?.(false);
         };
     }, [
         speed,

@@ -31,8 +31,26 @@ const OFFICE_MARKER_CONFIG = {
   size: 45,
 };
 
+// Module-level so Globe's load effect (which depends on this object's
+// identity) never sees a "new" object on re-render and re-triggers.
+const GLOBE_DOTS_CONFIG = {
+  color: "#1557D6",
+  size: 5,
+  density: 7,
+  allDots: false,
+};
+
 export default function Hero() {
   const isMobile = useIsMobile();
+  const [isGlobeLoading, setIsGlobeLoading] = useState(true);
+  // Stays mounted slightly past isGlobeLoading=false so the CSS opacity
+  // transition below can finish before the filler is removed from the DOM.
+  const [showGlobeFiller, setShowGlobeFiller] = useState(true);
+
+  const handleGlobeLoadingChange = (loading: boolean) => {
+    if (loading) setShowGlobeFiller(true);
+    setIsGlobeLoading(loading);
+  };
 
   return (
     <section
@@ -47,12 +65,7 @@ export default function Hero() {
           speed={3.5}
           smoothing={8}
           fill="dots"
-          dots={{
-            color: "#1557D6",
-            size: 5,
-            density: 7,
-            allDots: false,
-          }}
+          dots={GLOBE_DOTS_CONFIG}
           scale={9}
           stopOnHover
           markerConfig={OFFICE_MARKER_CONFIG}
@@ -64,7 +77,29 @@ export default function Hero() {
           graticuleColor={isMobile ? "rgba(21,87,214,0.3)" : "rgba(21,87,214,0.22)"}
           showOutline
           showGrid
+          onLoadingChange={handleGlobeLoadingChange}
         />
+
+        {/* Simple filler so the hero doesn't look stuck while the globe's
+            world data loads. Pure CSS, scoped to this container only —
+            no GSAP, no full-page block, so it can't compete with the
+            globe's heavy synchronous setup work. */}
+        {showGlobeFiller && (
+          <div
+            aria-hidden="true"
+            onTransitionEnd={() => {
+              if (!isGlobeLoading) setShowGlobeFiller(false);
+            }}
+            className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-white transition-opacity duration-[400ms] ease-out ${
+              isGlobeLoading ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <span className="relative flex h-14 w-14 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand/30" />
+              <span className="relative inline-flex h-6 w-6 rounded-full bg-brand" />
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Hero content */}
@@ -72,18 +107,18 @@ export default function Hero() {
         <div className="grid grid-cols-1 items-center gap-10 py-24 lg:min-h-screen lg:grid-cols-2 lg:py-32">
           {/* left: heading + subtitle, vertically centered */}
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand opacity-0 [animation:fade-up_0.7s_ease_both]">
               Diligent
             </p>
 
             <h1
               id="hero-heading"
-              className="mt-4 font-display text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-foreground md:text-6xl lg:text-7xl"
+              className="mt-4 font-display text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-foreground opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:100ms] md:text-6xl lg:text-7xl"
             >
               The Universal Compliance Platform
             </h1>
 
-            <p className="mt-6 max-w-md text-lg leading-8 text-text-muted">
+            <p className="mt-6 max-w-md text-lg leading-8 text-text-muted opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:220ms]">
               Banking, BGV, Vendor, Crypto and more.
             </p>
           </div>
@@ -91,12 +126,12 @@ export default function Hero() {
           {/* right: explanation text, then CTA row below */}
           <div className="flex flex-col items-start gap-8 lg:items-end lg:text-right">
             <div className="max-w-md lg:ml-auto lg:text-right">
-              <h2 className="font-display text-2xl font-semibold leading-snug tracking-[-0.02em] text-foreground">
+              <h2 className="font-display text-2xl font-semibold leading-snug tracking-[-0.02em] text-foreground opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:280ms]">
                 Simplifies Customer and employee journeys across client
                 lifecycle
               </h2>
 
-              <p className="mt-4 text-base leading-7 text-text-muted">
+              <p className="mt-4 text-base leading-7 text-text-muted opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:360ms]">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                 do eiusmod tempor incididunt ut labore et dolore magna
                 aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -104,7 +139,7 @@ export default function Hero() {
               </p>
             </div>
 
-            <div className="pointer-events-auto flex flex-wrap items-center gap-4 lg:justify-end">
+            <div className="pointer-events-auto flex flex-wrap items-center gap-4 opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:440ms] lg:justify-end">
               <Button href="/try-free" variant="primary" className="gap-3">
                 Try Free — No Credit Card
                 <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-white">
