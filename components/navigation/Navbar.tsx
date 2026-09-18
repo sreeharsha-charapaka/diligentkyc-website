@@ -94,6 +94,11 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -126,10 +131,22 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const wrapperStyle = scrolled || mobileMenuOpen
+    ? {
+        marginLeft: "max(16px, calc((100% - 1280px) / 2))",
+        marginRight: "max(16px, calc((100% - 1280px) / 2))",
+        marginTop: "16px",
+      }
+    : {
+        marginLeft: "0px",
+        marginRight: "0px",
+        marginTop: "0px",
+      };
+
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transform-gpu transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${
-        hidden ? "-translate-y-full" : "translate-y-0"
+      className={`fixed inset-x-0 top-0 z-50 transform-gpu transition-transform duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${
+        hidden ? "-translate-y-[150%]" : "translate-y-0"
       }`}
     >
       {/* Floating bar: this wrapper (not the header above) owns the
@@ -152,10 +169,11 @@ export function Navbar() {
           it was dropping frames partway through instead of running as one
           clean pass. */}
       <div
-        className={`mx-auto border transition-[width,max-width,transform,border-radius,background-color,border-color,padding-left,padding-right] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-          scrolled
-            ? "translate-y-3 w-[calc(100%-24px)] max-w-[1280px] rounded-2xl border-border bg-white/80 px-6 shadow-[0_18px_40px_-20px_rgba(17,17,17,0.18)] backdrop-blur-xl md:translate-y-4 md:px-8"
-            : "translate-y-0 w-full max-w-[2400px] rounded-none border-transparent bg-transparent px-6 shadow-none backdrop-blur-none md:px-10 xl:px-16"
+        style={wrapperStyle}
+        className={`border transition-all duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          scrolled || mobileMenuOpen
+            ? "rounded-2xl border-border bg-white/95 px-5 shadow-[0_24px_48px_-12px_rgba(17,17,17,0.18)] backdrop-blur-xl md:px-8"
+            : "rounded-none border-transparent bg-transparent px-6 shadow-none backdrop-blur-none md:px-10 xl:px-16"
         }`}
       >
         {/* Taller at rest (h-[72px]), easing down to the floating pill's
@@ -182,12 +200,12 @@ export function Navbar() {
             is its own separate bug. */}
         <nav
           aria-label="Main navigation"
-          className={`mx-auto flex w-full max-w-[1280px] items-center justify-between transition-[height] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-            scrolled ? "h-14" : "h-[72px]"
+          className={`mx-auto flex w-full max-w-[1280px] items-center justify-between transition-[height] duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+            scrolled ? "h-16" : "h-[76px]"
           }`}
         >
           <div
-            className={`transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+            className={`transition-transform duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
               scrolled ? "scale-100" : "scale-105"
             }`}
           >
@@ -212,7 +230,7 @@ export function Navbar() {
                   ))}
                 </span>
 
-                <span className="mt-0.5 whitespace-nowrap text-[8px] font-medium uppercase tracking-[0.08em] text-text-muted">
+                <span className="mt-0.5 hidden whitespace-nowrap text-[8px] font-medium uppercase tracking-[0.08em] text-text-muted sm:block">
                   Customer Due Diligence Platform
                 </span>
               </span>
@@ -220,7 +238,7 @@ export function Navbar() {
           </div>
 
           <div
-            className={`hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:block ${
+            className={`hidden transition-transform duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:block ${
               scrolled ? "scale-100" : "scale-105"
             }`}
           >
@@ -256,42 +274,43 @@ export function Navbar() {
 
                   <div
                     className={[
-                      "invisible absolute left-1/2 top-full z-50 w-[640px] -translate-x-1/2 translate-y-2 opacity-0",
-                      "rounded-2xl border border-border bg-white p-2 shadow-xl shadow-black/10",
-                      "transition-[visibility,opacity,transform] duration-150",
-                      "group-hover:visible group-hover:translate-y-3 group-hover:opacity-100",
-                      "group-focus-within:visible group-focus-within:translate-y-3 group-focus-within:opacity-100",
+                      "invisible absolute left-1/2 top-full z-50 w-[600px] -translate-x-1/2 pt-6",
+                      "opacity-0 translate-y-0 transition-[visibility,opacity,transform] duration-150",
+                      "group-hover:visible group-hover:translate-y-1 group-hover:opacity-100",
+                      "group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100",
                     ].join(" ")}
                   >
-                    <div className="grid grid-cols-[220px_1fr] gap-2">
-                      <div className="flex flex-col justify-between rounded-xl bg-surface p-5">
-                        <p className="font-display text-lg font-semibold leading-snug text-foreground">
-                          {item.panelHeading}
-                        </p>
-
-                        <Link
-                          href={item.href}
-                          className="mt-6 inline-flex w-fit items-center justify-center rounded-full border border-border bg-white px-4 py-2 text-xs font-medium text-foreground transition-colors hover:border-brand hover:text-brand"
-                        >
-                          See overview
-                        </Link>
-                      </div>
-
-                      <div className="flex flex-col gap-0.5 p-1">
-                        <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.1em] text-text-muted">
-                          {item.columnLabel}
-                        </p>
-
-                        {item.items.map((child, index) => (
-                          <FadeUp key={child.href} delay={index * 40}>
-                            <Link
-                              href={child.href}
-                              className="block rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-brand"
-                            >
-                              {child.label}
-                            </Link>
-                          </FadeUp>
-                        ))}
+                    <div className="rounded-[24px] border border-border bg-white/95 p-2 shadow-[0_24px_48px_-12px_rgba(17,17,17,0.18)] backdrop-blur-xl">
+                      <div className="grid grid-cols-[220px_1fr] gap-2">
+                        <div className="flex flex-col justify-between rounded-[16px] bg-surface p-5">
+                          <p className="font-display text-lg font-semibold leading-snug text-foreground">
+                            {item.panelHeading}
+                          </p>
+                          <Link
+                            href={item.href}
+                            className="mt-6 inline-flex w-fit items-center justify-center rounded-full border border-border bg-white px-4 py-2 text-xs font-medium text-foreground transition-colors hover:border-brand hover:text-brand"
+                          >
+                            See overview
+                          </Link>
+                        </div>
+                        <div className="flex flex-col gap-0.5 p-1">
+                          <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.1em] text-text-muted">
+                            {item.columnLabel}
+                          </p>
+                          {item.items.map((child, index) => (
+                            <FadeUp key={child.href} delay={index * 40}>
+                              <Link
+                                href={child.href}
+                                className="group/link block rounded-[12px] px-3 py-2.5 transition-colors hover:bg-surface"
+                              >
+                                <div className="text-sm font-medium text-foreground transition-colors group-hover/link:text-brand">{child.label}</div>
+                                {child.description && (
+                                  <div className="mt-0.5 text-xs text-text-muted line-clamp-1">{child.description}</div>
+                                )}
+                              </Link>
+                            </FadeUp>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -313,7 +332,7 @@ export function Navbar() {
           </div>
 
           <div
-            className={`hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:block ${
+            className={`hidden transition-transform duration-[500ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:block ${
               scrolled ? "scale-100" : "scale-105"
             }`}
           >
@@ -330,21 +349,61 @@ export function Navbar() {
 
           <button
             type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Open navigation menu"
-            aria-expanded="false"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-border opacity-0 [animation:fade-up_0.7s_ease_both] [animation-delay:140ms] lg:hidden"
+            aria-expanded={mobileMenuOpen}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white/50 opacity-0 transition-colors hover:bg-surface [animation:fade-up_0.7s_ease_both] [animation-delay:140ms] lg:hidden"
           >
             <span className="sr-only">Open menu</span>
-
-            <span
-              aria-hidden="true"
-              className="flex w-5 flex-col gap-1.5"
-            >
-              <span className="h-px w-full bg-black" />
-              <span className="h-px w-full bg-black" />
+            <span aria-hidden="true" className="relative h-[10px] w-5">
+              <span className={`absolute left-0 top-0 h-px w-full bg-black transition-transform duration-300 ${mobileMenuOpen ? 'translate-y-[4.5px] rotate-45' : ''}`} />
+              <span className={`absolute left-0 bottom-0 h-px w-full bg-black transition-transform duration-300 ${mobileMenuOpen ? '-translate-y-[4.5px] -rotate-45' : ''}`} />
             </span>
           </button>
         </nav>
+
+        {/* Mobile Menu */}
+        <div
+          className={`grid transition-all duration-300 ease-in-out lg:hidden ${
+            mobileMenuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="min-h-0 max-h-[calc(100vh-120px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex flex-col gap-1 pb-6 pt-2">
+              {navigation.map((item) => (
+                <div key={item.href} className="flex flex-col">
+                  <Link
+                    href={item.href}
+                    className="py-2 font-display text-lg font-medium text-foreground transition-colors hover:text-brand"
+                  >
+                    {item.label}
+                  </Link>
+                  {item.items && (
+                    <div className="mb-2 ml-2 mt-1 flex flex-col gap-2 border-l-2 border-border/50 pl-4">
+                      {item.items.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="py-1.5 text-sm font-medium text-text-muted transition-colors hover:text-brand"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Button href="/try-free" variant="secondary" className="w-full justify-center">
+                  Try Free
+                </Button>
+                <Button href="/demo" variant="primary" className="w-full justify-center">
+                  Book a Demo
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );
