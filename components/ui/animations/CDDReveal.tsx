@@ -48,7 +48,7 @@ export function FadeRightBlink({ children, className = "" }: FadeRightBlinkProps
           gsap.to(cursor, {
             opacity: 0,
             duration: 0.6,
-            repeat: -1,
+            repeat: -1,   
             yoyo: true,
             ease: "steps(1)",
           });

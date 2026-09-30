@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/ui/animations/FadeUp";
@@ -95,6 +95,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -105,7 +106,19 @@ export function Navbar() {
 
       setScrolled(currentScrollY > 20);
 
-      if (currentScrollY < 80) {
+      // Sections marked data-hide-nav keep the bar hidden while they sit
+      // under it, regardless of scroll direction.
+      const navHeight = headerRef.current?.offsetHeight ?? 0;
+      const overHideZone = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-hide-nav]")
+      ).some((el) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top < navHeight && rect.bottom > 0;
+      });
+
+      if (overHideZone) {
+        setHidden(true);
+      } else if (currentScrollY < 80) {
         setHidden(false);
       } else if (delta > 4) {
         setHidden(true);
@@ -123,6 +136,7 @@ export function Navbar() {
 
   return (
     <header
+      ref={headerRef}
       className={`fixed inset-x-0 top-0 z-50 transform-gpu transition-all duration-500 ease-in-out will-change-transform ${
         scrolled ? "bg-white shadow-sm shadow-black/5" : "bg-transparent"
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
