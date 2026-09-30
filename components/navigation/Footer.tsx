@@ -113,7 +113,7 @@ export function Footer() {
           {/* Background Dim Text */}
           <div className="flex w-full justify-between">
             {"DILIGENT".split("").map((letter, i) => (
-              <span key={i} className="font-display text-[15vw] xl:text-[230px] font-bold uppercase text-white/[0.03]">
+              <span key={i} className="font-display text-[15vw] xl:text-[230px] font-bold uppercase text-white/[0.06]">
                 {letter}
               </span>
             ))}
@@ -128,7 +128,7 @@ export function Footer() {
             }}
           >
             {"DILIGENT".split("").map((letter, i) => (
-              <span key={i} className="font-display text-[15vw] xl:text-[230px] font-bold uppercase text-brand/60">
+              <span key={i} className="font-display text-[15vw] xl:text-[230px] font-bold uppercase text-brand">
                 {letter}
               </span>
             ))}

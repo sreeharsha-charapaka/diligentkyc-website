@@ -6,7 +6,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/ui/animations/FadeUp";
-import { solutions } from "@/data/solutions";
+import {
+  Settings, Wrench, Cloud, Bot, Building2,
+  User, Truck, Bitcoin, Home, Shield,
+  Hospital, GraduationCap, FileText, Clipboard,
+  Inbox, Flame, Handshake, Lock
+} from "lucide-react";
 
 const navigation = [
   {
@@ -16,28 +21,32 @@ const navigation = [
   {
     label: "Platform",
     href: "/platform",
-    panelHeading: "One platform, lorem ipsum dolor sit",
+    panelHeading: "One platform, built for compliance",
     columnLabel: "Capabilities",
     items: [
       {
-        label: "Lorem Ipsum",
-        href: "/platform/lorem-ipsum",
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+        label: "How It Works",
+        href: "/platform/how-it-works",
+        description: "Understand the core mechanics of our due diligence engine.",
+        icon: <Settings className="w-4 h-4" />,
       },
       {
-        label: "Dolor Sit Amet",
-        href: "/platform/dolor-sit-amet",
-        description: "Sed do eiusmod tempor incididunt ut labore et dolore.",
+        label: "Features",
+        href: "/platform/features",
+        description: "Explore the comprehensive toolset built for compliance.",
+        icon: <Wrench className="w-4 h-4" />,
       },
       {
-        label: "Consectetur",
-        href: "/platform/consectetur",
-        description: "Ut enim ad minim veniam quis nostrud exercitation.",
+        label: "Cloud Agnostic",
+        href: "/platform/cloud-agnostic",
+        description: "Deploy anywhere. Seamless integration with any infrastructure.",
+        icon: <Cloud className="w-4 h-4" />,
       },
       {
-        label: "Adipiscing Elit",
-        href: "/platform/adipiscing-elit",
-        description: "Duis aute irure dolor in reprehenderit in voluptate.",
+        label: "AI Roadmap",
+        href: "/platform/ai-roadmap",
+        description: "Discover our vision for the future of automated compliance.",
+        icon: <Bot className="w-4 h-4" />,
       },
     ],
   },
@@ -46,47 +55,122 @@ const navigation = [
     href: "/solutions",
     panelHeading: "Compliance workflows for every industry",
     columnLabel: "Industries",
-    items: solutions.map((solution) => ({
-      label: solution.shortName,
-      href: `/solutions/${solution.slug}`,
-      description: solution.description,
-    })),
+    items: [
+      {
+        label: "Banking & Fintech",
+        href: "/solutions/banking-fintech",
+        description: "Streamline compliance for financial institutions.",
+        icon: <Building2 className="w-4 h-4" />,
+      },
+      {
+        label: "Employee BGV",
+        href: "/solutions/employee-bgv",
+        description: "Automated background verification for global teams.",
+        icon: <User className="w-4 h-4" />,
+      },
+      {
+        label: "Vendor Onboarding",
+        href: "/solutions/vendor-onboarding",
+        description: "Assess and monitor third-party risk efficiently.",
+        icon: <Truck className="w-4 h-4" />,
+      },
+      {
+        label: "Crypto & Digital Assets",
+        href: "/solutions/crypto",
+        description: "Navigate complex regulations in web3 and crypto.",
+        icon: <Bitcoin className="w-4 h-4" />,
+      },
+      {
+        label: "Real Estate AML",
+        href: "/solutions/real-estate",
+        description: "Prevent money laundering in property transactions.",
+        icon: <Home className="w-4 h-4" />,
+      },
+      {
+        label: "Insurance",
+        href: "/solutions/insurance",
+        description: "Fraud prevention and KYC for insurance providers.",
+        icon: <Shield className="w-4 h-4" />,
+      },
+      {
+        label: "Healthcare",
+        href: "/solutions/healthcare",
+        description: "Credential verification and compliance for healthcare.",
+        icon: <Hospital className="w-4 h-4" />,
+      },
+      {
+        label: "Education",
+        href: "/solutions/education",
+        description: "Student and staff verification for educational institutions.",
+        icon: <GraduationCap className="w-4 h-4" />,
+      },
+    ],
   },
   {
-    label: "Pricing",
+    label: (
+      <span className="flex items-center gap-1.5">
+        Pricing <Flame className="w-4 h-4 text-orange-500" />
+      </span>
+    ),
     href: "/pricing",
   },
   {
     label: "Resources",
     href: "/resources",
-    panelHeading: "Guides, lorem ipsum dolor sit amet",
+    panelHeading: "Knowledge and insights",
     columnLabel: "Explore",
     items: [
       {
-        label: "Lorem Ipsum",
-        href: "/resources/lorem-ipsum",
-        description: "Excepteur sint occaecat cupidatat non proident.",
+        label: "Blog",
+        href: "/resources/blog",
+        description: "Insights, updates, and deep dives into compliance.",
+        icon: <FileText className="w-4 h-4" />,
       },
       {
-        label: "Dolor Sit Amet",
-        href: "/resources/dolor-sit-amet",
-        description: "Sunt in culpa qui officia deserunt mollit anim.",
+        label: "FAQs",
+        href: "/resources/faqs",
+        description: "Answers to the most common questions about Diligent.",
+        icon: <Clipboard className="w-4 h-4" />,
       },
       {
-        label: "Consectetur",
-        href: "/resources/consectetur",
-        description: "Id est laborum et dolorum fuga et harum quidem.",
-      },
-      {
-        label: "Adipiscing Elit",
-        href: "/resources/adipiscing-elit",
-        description: "Rerum facilis est et expedita distinctio nam libero.",
+        label: "Brochures",
+        href: "/resources/brochures",
+        description: "Downloadable materials detailing our solutions.",
+        icon: <Inbox className="w-4 h-4" />,
       },
     ],
   },
   {
     label: "Company",
     href: "/company",
+    panelHeading: "About Diligent",
+    columnLabel: "Discover",
+    items: [
+      {
+        label: "About Us",
+        href: "/company/about",
+        description: "Learn about our mission and the team behind Diligent.",
+        icon: <Building2 className="w-4 h-4" />,
+      },
+      {
+        label: "Team",
+        href: "/company/team",
+        description: "Meet the experts building the future of compliance.",
+        icon: <User className="w-4 h-4" />,
+      },
+      {
+        label: "Partners",
+        href: "/company/partners",
+        description: "Explore our global network of integration partners.",
+        icon: <Handshake className="w-4 h-4" />,
+      },
+      {
+        label: "Security & Trust",
+        href: "/company/security",
+        description: "How we protect your data and ensure compliance.",
+        icon: <Lock className="w-4 h-4" />,
+      },
+    ],
   },
 ];
 
@@ -297,15 +381,19 @@ export function Navbar() {
                           <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.1em] text-text-muted">
                             {item.columnLabel}
                           </p>
-                          {item.items.map((child, index) => (
+                          {item.items.map((child: any, index) => (
                             <FadeUp key={child.href} delay={index * 40}>
+                              {child.divider && <div className="my-1 mx-3 h-px bg-border/50" />}
                               <Link
                                 href={child.href}
                                 className="group/link block rounded-[12px] px-3 py-2.5 transition-colors hover:bg-surface"
                               >
-                                <div className="text-sm font-medium text-foreground transition-colors group-hover/link:text-brand">{child.label}</div>
+                                <div className="flex items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover/link:text-brand">
+                                  {child.icon && <span className="text-text-muted transition-colors group-hover/link:text-brand">{child.icon}</span>}
+                                  {child.label}
+                                </div>
                                 {child.description && (
-                                  <div className="mt-0.5 text-xs text-text-muted line-clamp-1">{child.description}</div>
+                                  <div className="mt-0.5 ml-6 text-xs text-text-muted line-clamp-1">{child.description}</div>
                                 )}
                               </Link>
                             </FadeUp>
@@ -380,14 +468,17 @@ export function Navbar() {
                   </Link>
                   {item.items && (
                     <div className="mb-2 ml-2 mt-1 flex flex-col gap-2 border-l-2 border-border/50 pl-4">
-                      {item.items.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          className="py-1.5 text-sm font-medium text-text-muted transition-colors hover:text-brand"
-                        >
-                          {child.label}
-                        </Link>
+                      {item.items.map((child: any) => (
+                        <div key={child.href} className="flex flex-col">
+                          {child.divider && <div className="my-1 h-px w-10 bg-border/50" />}
+                          <Link
+                            href={child.href}
+                            className="flex items-center gap-2 py-1.5 text-sm font-medium text-text-muted transition-colors hover:text-brand"
+                          >
+                            {child.icon && <span>{child.icon}</span>}
+                            {child.label}
+                          </Link>
+                        </div>
                       ))}
                     </div>
                   )}
